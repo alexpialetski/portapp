@@ -3,7 +3,7 @@ import {
   GroupedPortfolio,
   GroupedPortfolioOperation,
 } from "types/portfolio";
-import { Free2exCSV } from "types/free2ex";
+import { Free2exCSV, Free2exType } from "types/free2ex";
 import { AssetSymbol } from "types/asset";
 
 import { isFree2exAssetOperation } from "./free2ex";
@@ -45,7 +45,11 @@ export const parseFree2exPortfolio = (csv: Free2exCSV): GroupedPortfolio =>
         const operationDate = resetDateToStart(+new Date(free2exOperation[1]));
         const operations = acc[operationDate] || [];
 
-        if (free2exOperation[2] === "BUY Market") {
+        if (
+          (["BUY Market", "SELL Market"] as Free2exType[]).includes(
+            free2exOperation[2]
+          )
+        ) {
           const [asset1, asset2] = free2exOperation[5]
             .split("/")
             .map((asset) => asset.trim()) as [AssetSymbol, AssetSymbol];

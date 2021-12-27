@@ -1,6 +1,6 @@
 export type Free2exCSVMeta = [string, string];
 
-export type Free2exType = "BUY Market" | "Deposit";
+export type Free2exType = "BUY Market" | "Deposit" | "SELL Market";
 export type Free2exOperationType = "OrderFilled" | "Balance";
 
 export type Free2exAssetOperation = [
