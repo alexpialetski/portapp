@@ -1,15 +1,13 @@
 {
   "files": {
-    "main.js": "/portapp/static/js/main.070a9090.chunk.js",
-    "main.js.map": "/portapp/static/js/main.070a9090.chunk.js.map",
+    "main.js": "/portapp/static/js/main.7bd45607.chunk.js",
+    "main.js.map": "/portapp/static/js/main.7bd45607.chunk.js.map",
     "runtime-main.js": "/portapp/static/js/runtime-main.60ffad5c.js",
     "runtime-main.js.map": "/portapp/static/js/runtime-main.60ffad5c.js.map",
     "static/css/2.757a7212.chunk.css": "/portapp/static/css/2.757a7212.chunk.css",
     "static/js/2.e3582c69.chunk.js": "/portapp/static/js/2.e3582c69.chunk.js",
     "static/js/2.e3582c69.chunk.js.map": "/portapp/static/js/2.e3582c69.chunk.js.map",
     "index.html": "/portapp/index.html",
-    "service-worker.js": "/portapp/service-worker.js",
-    "service-worker.js.map": "/portapp/service-worker.js.map",
     "static/css/2.757a7212.chunk.css.map": "/portapp/static/css/2.757a7212.chunk.css.map",
     "static/js/2.e3582c69.chunk.js.LICENSE.txt": "/portapp/static/js/2.e3582c69.chunk.js.LICENSE.txt"
   },
@@ -17,6 +15,6 @@
     "static/js/runtime-main.60ffad5c.js",
     "static/css/2.757a7212.chunk.css",
     "static/js/2.e3582c69.chunk.js",
-    "static/js/main.070a9090.chunk.js"
+    "static/js/main.7bd45607.chunk.js"
   ]
 }
