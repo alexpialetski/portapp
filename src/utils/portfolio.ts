@@ -32,16 +32,29 @@ export const combinePortfolioAndSeries = (
     ).reduce<AssetRecordWithTotal>(
       (innerAcc, symbol) => {
         const assetPriceByDate = seriesDateVolume[symbol] || 0;
-        const portfolioVolume = portfolioDateVolume[symbol] || 0;
-        const assetPrice = portfolioVolume * assetPriceByDate;
+        const portfolioAssetInfo = portfolioDateVolume[symbol] || {
+          volume: 0,
+          investment: 0,
+        };
+        const assetPrice = portfolioAssetInfo.volume * assetPriceByDate;
+        const usdInvestments = portfolioDateVolume.USD?.investment || 0;
+        const totalPrice = innerAcc.TOTAL.price + assetPrice;
 
         return {
           ...innerAcc,
-          [symbol]: portfolioVolume * assetPriceByDate,
-          TOTAL: innerAcc.TOTAL + assetPrice,
+          [symbol]: {
+            volume: portfolioAssetInfo.volume,
+            price: assetPrice,
+            investment: portfolioAssetInfo.investment,
+          },
+          TOTAL: {
+            volume: 0,
+            price: totalPrice,
+            investment: usdInvestments,
+          },
         };
       },
-      { TOTAL: 0 }
+      { TOTAL: { volume: 0, price: 0, investment: 0 } }
     );
 
     return {

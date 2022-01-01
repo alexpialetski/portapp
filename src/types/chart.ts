@@ -1,6 +1,7 @@
 export type DailyAssetPrice = {
-  date: Date;
+  date: number;
   price: number;
+  volume: number;
 };
 
 export type Series = {

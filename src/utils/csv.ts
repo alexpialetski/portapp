@@ -21,11 +21,19 @@ export const parseGroupedPortfolioOperations = (
 
     groupedPortfolio[dates[i]] = operations[dates[i]].reduce<AssetRecord>(
       (acc, assetOperation) => {
-        if (acc[assetOperation.symbol]) {
+        const prevAssetInfo = acc[assetOperation.symbol];
+        if (prevAssetInfo) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          acc[assetOperation.symbol]! += assetOperation.volume;
+          acc[assetOperation.symbol]! = {
+            ...prevAssetInfo,
+            investment: prevAssetInfo.investment + assetOperation.investment,
+            volume: prevAssetInfo.volume + assetOperation.volume,
+          };
         } else {
-          acc[assetOperation.symbol] = assetOperation.volume;
+          acc[assetOperation.symbol] = {
+            volume: assetOperation.volume,
+            investment: assetOperation.investment,
+          };
         }
 
         return acc;
@@ -57,15 +65,19 @@ export const parseFree2exPortfolio = (csv: Free2exCSV): GroupedPortfolio =>
           operations.push({
             symbol: asset1,
             volume: parseFloat(free2exOperation[19]),
+            investment:
+              asset2 === "USD" ? parseFloat(free2exOperation[20]) * -1 : 0,
           });
           operations.push({
             symbol: asset2,
             volume: parseFloat(free2exOperation[20]),
+            investment: 0,
           });
         } else {
           operations.push({
             symbol: free2exOperation[5] as AssetSymbol,
             volume: parseFloat(free2exOperation[19]),
+            investment: parseFloat(free2exOperation[19]),
           });
         }
 

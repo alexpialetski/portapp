@@ -1,47 +1,69 @@
-import React, { useMemo } from "react";
-import { Chart, AxisOptions } from "react-charts";
+import {
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  CartesianGrid,
+  Legend,
+} from "recharts";
 
-import { DailyAssetPrice, Series } from "types/chart";
-import { getChartByAsset } from "utils/chart";
-import { PortfolioAssetDayPrice, PortfolioAssetSymbol } from "types";
+import {
+  formatSeriesDate,
+  formatSeriesNumber,
+  formatSeriesFloat,
+} from "utils/chart";
+import { DailyAssetPrice, Series } from "types";
+
+import { CustomTooltip } from "./recharts/CustomTooltip";
+
+const DOMAIN = ["auto", "auto"];
+const COLOR_PALETTE = ["#1976d2", "#F99B1C"];
 
 export type ChartByAssetProps = {
-  asset: PortfolioAssetSymbol;
-  portfolioAssetDayPrice: PortfolioAssetDayPrice;
+  series: Series[];
+  seriesKey?: Exclude<keyof DailyAssetPrice, "date">;
 };
 
 export const ChartByAsset: React.FC<ChartByAssetProps> = ({
-  portfolioAssetDayPrice,
-  asset,
-}) => {
-  const chartSeries = useMemo<Series>(
-    () => getChartByAsset(asset, portfolioAssetDayPrice),
-    [portfolioAssetDayPrice, asset]
-  );
+  series,
+  seriesKey = "price",
+}) => (
+  <ResponsiveContainer>
+    <LineChart>
+      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+      <XAxis
+        dataKey="date"
+        scale="time"
+        type="number"
+        tickFormatter={formatSeriesDate}
+        domain={DOMAIN}
+      />
+      <YAxis
+        dataKey={seriesKey}
+        type="number"
+        tickFormatter={
+          seriesKey === "price" ? formatSeriesNumber : formatSeriesFloat
+        }
+        domain={DOMAIN}
+      />
+      <Tooltip content={<CustomTooltip />} />
+      {series.map((s, index) => {
+        const strokeColor = COLOR_PALETTE[index] || COLOR_PALETTE[0];
 
-  const primaryAxis = useMemo(
-    (): AxisOptions<DailyAssetPrice> => ({
-      getValue: (datum) => datum.date,
-    }),
-    []
-  );
-
-  const secondaryAxes = useMemo(
-    (): AxisOptions<DailyAssetPrice>[] => [
-      {
-        getValue: (datum) => datum.price,
-      },
-    ],
-    []
-  );
-
-  return (
-    <Chart
-      options={{
-        data: [chartSeries],
-        primaryAxis,
-        secondaryAxes,
-      }}
-    />
-  );
-};
+        return (
+          <Line
+            type="monotone"
+            dataKey={seriesKey}
+            data={s.data}
+            name={s.label}
+            key={s.label}
+            stroke={strokeColor}
+          />
+        );
+      })}
+      {series.length > 1 && <Legend />}
+    </LineChart>
+  </ResponsiveContainer>
+);
