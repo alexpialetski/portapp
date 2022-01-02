@@ -6,7 +6,6 @@ import {
   ResponsiveContainer,
   LineChart,
   CartesianGrid,
-  Legend,
 } from "recharts";
 
 import {
@@ -31,7 +30,7 @@ export const ChartByAsset: React.FC<ChartByAssetProps> = ({
   seriesKey = "price",
 }) => (
   <ResponsiveContainer>
-    <LineChart>
+    <LineChart margin={{ left: 0, top: 0, right: 20, bottom: 0 }}>
       <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
       <XAxis
         dataKey="date"
@@ -63,7 +62,6 @@ export const ChartByAsset: React.FC<ChartByAssetProps> = ({
           />
         );
       })}
-      {series.length > 1 && <Legend />}
     </LineChart>
   </ResponsiveContainer>
 );

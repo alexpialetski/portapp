@@ -26,7 +26,7 @@ export const LINKS: Array<{
   },
   {
     path: `/${PAGE_SLUG.assets}`,
-    text: "Asset",
+    text: "Assets",
     Icon: <PieChartIcon />,
   },
 ];

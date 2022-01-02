@@ -25,7 +25,7 @@ export const Assets: React.FC = () => {
                 asset,
                 portfolioAssetDayPrice,
                 "investment",
-                "Investments",
+                "Fund",
                 false
               ),
             ]}

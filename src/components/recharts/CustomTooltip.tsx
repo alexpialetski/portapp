@@ -71,7 +71,7 @@ export const CustomTooltip: React.FC<CustomTooltipProps> = ({
                 </CircleContainer>
                 <td>{name}</td>
                 <td>{formatSeriesNumber(data.price)}</td>
-                <td>{formatSeriesFloat(data.volume)}</td>
+                <td>{data.volume ? formatSeriesFloat(data.volume) : "---"}</td>
               </TableRow>
             ))}
           </tbody>

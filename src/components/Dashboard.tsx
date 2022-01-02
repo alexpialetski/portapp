@@ -12,11 +12,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { styled, useTheme } from "@mui/material/styles";
 
-import { Copyright } from "./Copyright";
 import { AppBar } from "./AppBar";
 import { Drawer } from "./Drawer";
 import { Backdrop } from "./Backdrop";
 import { SideMenuListItems, LINKS } from "./SideMenuListItems";
+import { BarPortfolioStat } from "./BarPortfolioStat";
 
 const drawerWidth = 240;
 
@@ -44,6 +44,11 @@ const MobileBackdrop = styled(Backdrop)(({ theme }) => ({
   },
 }));
 
+const StyledContainer = styled(Container)(() => ({
+  flexGrow: 1,
+  padding: "0 !important",
+}));
+
 export const Dashboard: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -64,28 +69,25 @@ export const Dashboard: React.FC<{ children: React.ReactNode }> = ({
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open} drawerWidth={drawerWidth}>
-          <Toolbar variant="dense">
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              {currentPageName}
-            </Typography>
+          <Toolbar variant="dense" sx={{ justifyContent: "space-between" }}>
+            <Box display="flex" alignItems="center">
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: "24px",
+                  ...(open && { display: "none" }),
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography component="h1" variant="h6" color="inherit" noWrap>
+                {currentPageName}
+              </Typography>
+            </Box>
+            <BarPortfolioStat />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} drawerWidth={drawerWidth}>
@@ -108,13 +110,7 @@ export const Dashboard: React.FC<{ children: React.ReactNode }> = ({
         {open && <MobileBackdrop onClick={toggleDrawer} />}
         <Main>
           <Toolbar sx={{ flex: "0 1 auto" }} />
-          <Container
-            maxWidth="lg"
-            sx={{ mt: 4, mb: 4, flexGrow: 1, padding: "0 !important" }}
-          >
-            {children}
-          </Container>
-          <Copyright />
+          <StyledContainer maxWidth="lg">{children}</StyledContainer>
         </Main>
       </Box>
     </ThemeProvider>
