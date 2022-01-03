@@ -2,24 +2,27 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 
 import { usePortfolioManager } from "services/PortfolioManager";
-import { resetDateToStart, getDaysBefore } from "utils/date";
-import { formatSeriesFloat } from "utils/chart";
+import {
+  resetDateToStart,
+  getDaysBefore,
+  formatSeriesFloat,
+  getDifferenceInPercents,
+} from "utils";
 
 export const BarPortfolioStat: React.FC = () => {
   const { portfolioAssetDayPrice } = usePortfolioManager();
+  const yesterday = getDaysBefore(resetDateToStart(Date.now()), 1);
 
   if (!portfolioAssetDayPrice) {
     return null;
   }
 
-  const totalInfo =
-    portfolioAssetDayPrice[getDaysBefore(resetDateToStart(Date.now()), 1)]
-      .TOTAL;
+  const totalInfo = portfolioAssetDayPrice[yesterday].TOTAL;
 
   return (
     <Typography component="h1" variant="body1" color="inherit" noWrap>
       {`${formatSeriesFloat(totalInfo.price)}$ & ${formatSeriesFloat(
-        ((totalInfo.price - totalInfo.investment) / totalInfo.investment) * 100
+        getDifferenceInPercents(portfolioAssetDayPrice, yesterday, "TOTAL")
       )}%`}
       {}
     </Typography>

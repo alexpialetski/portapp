@@ -4,8 +4,9 @@ import {
   GroupedPortfolio,
   PortfolioAssetDayPrice,
   AssetRecordWithTotal,
+  PortfolioAssetSymbol,
 } from "types";
-import { findClosestAndLessDate } from "utils";
+import { findClosestAndLessDate } from "utils/date";
 
 export const getUniqueAssets = (portfolio: GroupedPortfolio): AssetSymbol[] =>
   Object.keys(portfolio).reduce<AssetSymbol[]>((acc, date) => {
@@ -62,4 +63,14 @@ export const combinePortfolioAndSeries = (
       [date]: portfolioBySeries,
     };
   }, {});
+};
+
+export const getDifferenceInPercents = (
+  portfolioAssetDayPrice: PortfolioAssetDayPrice,
+  date: number,
+  asset: PortfolioAssetSymbol
+): number => {
+  const info = portfolioAssetDayPrice[date][asset];
+
+  return info ? ((info.price - info.investment) / info.investment) * 100 : 0;
 };
