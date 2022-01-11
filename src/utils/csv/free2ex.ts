@@ -10,14 +10,21 @@ import { isFree2exAssetOperation } from "../free2ex";
 import { resetDateToStart } from "../date";
 import { parseGroupedPortfolioOperations } from "./common";
 
+const parseSymbolToGeneric = (asset: string): AssetSymbol =>
+  (asset === "MAT" ? "MATIC" : asset) as AssetSymbol;
+
+const parsePairSymbol = (symbol: string): [AssetSymbol, AssetSymbol] =>
+  symbol
+    .split("/")
+    .map((asset) => asset.trim())
+    .map(parseSymbolToGeneric) as [AssetSymbol, AssetSymbol];
+
 export const appendAssetOperations = (
   operations: PortfolioOperation[],
   free2exOperation: Free2exAssetOperation
 ): PortfolioOperation[] => {
   if (free2exOperation[2] === "BUY Market") {
-    const [asset1, asset2] = free2exOperation[5]
-      .split("/")
-      .map((asset) => asset.trim()) as [AssetSymbol, AssetSymbol];
+    const [asset1, asset2] = parsePairSymbol(free2exOperation[5]);
 
     operations.push({
       symbol: asset1,
@@ -32,9 +39,7 @@ export const appendAssetOperations = (
   }
 
   if (free2exOperation[2] === "SELL Market") {
-    const [asset1, asset2] = free2exOperation[5]
-      .split("/")
-      .map((asset) => asset.trim()) as [AssetSymbol, AssetSymbol];
+    const [asset1, asset2] = parsePairSymbol(free2exOperation[5]);
 
     operations.push({
       symbol: asset1,
@@ -48,9 +53,9 @@ export const appendAssetOperations = (
     });
   }
 
-  if (free2exOperation[2] === "Deposit") {
+  if (["Deposit", "Withdrawal"].includes(free2exOperation[2])) {
     operations.push({
-      symbol: free2exOperation[5] as AssetSymbol,
+      symbol: parseSymbolToGeneric(free2exOperation[5]),
       volume: parseFloat(free2exOperation[19]),
       investment: parseFloat(free2exOperation[19]),
     });
