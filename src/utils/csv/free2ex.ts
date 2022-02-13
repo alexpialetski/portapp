@@ -3,10 +3,9 @@ import {
   GroupedPortfolioOperation,
   PortfolioOperation,
 } from "types/portfolio";
-import { Free2exCSV, Free2exAssetOperation } from "types/free2ex";
+import { Free2exAssetOperation } from "types/free2ex";
 import { AssetSymbol } from "types/asset";
 
-import { isFree2exAssetOperation } from "../free2ex";
 import { resetDateToStart } from "../date";
 import { parseGroupedPortfolioOperations } from "./common";
 
@@ -64,18 +63,18 @@ export const appendAssetOperations = (
   return operations;
 };
 
-export const parseFree2exPortfolio = (csv: Free2exCSV): GroupedPortfolio =>
+export const parseFree2exPortfolio = (
+  rawOperations: Free2exAssetOperation[]
+): GroupedPortfolio =>
   parseGroupedPortfolioOperations(
-    csv
-      .filter(isFree2exAssetOperation)
-      .reduce<GroupedPortfolioOperation>((acc, free2exOperation) => {
-        const operationDate = resetDateToStart(+new Date(free2exOperation[1]));
-        const operations: PortfolioOperation[] = acc[operationDate] || [];
-        const updatedOperations = appendAssetOperations(
-          operations.slice(),
-          free2exOperation
-        );
+    rawOperations.reduce<GroupedPortfolioOperation>((acc, free2exOperation) => {
+      const operationDate = resetDateToStart(+new Date(free2exOperation[1]));
+      const operations: PortfolioOperation[] = acc[operationDate] || [];
+      const updatedOperations = appendAssetOperations(
+        operations.slice(),
+        free2exOperation
+      );
 
-        return { ...acc, [operationDate]: updatedOperations };
-      }, {})
+      return { ...acc, [operationDate]: updatedOperations };
+    }, {})
   );
